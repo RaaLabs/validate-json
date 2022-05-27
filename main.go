@@ -10,8 +10,8 @@ import (
 )
 
 func main() {
-
-	jsonFilepaths := getJsonFilePaths()
+	directory := os.Getenv("INPUT_DIRECTORY")
+	jsonFilepaths := getJsonFilePaths(directory)
 	var failure int
 
 	for _, f := range jsonFilepaths {
@@ -51,10 +51,10 @@ func main() {
 	}
 }
 
-func getJsonFilePaths() []string {
+func getJsonFilePaths(directory string) []string {
 	files := []string{}
 
-	err := filepath.Walk(".",
+	err := filepath.Walk(directory,
 		func(path string, info os.FileInfo, err error) error {
 			if err != nil {
 				return err
