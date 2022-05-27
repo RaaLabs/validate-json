@@ -14,6 +14,8 @@ func main() {
 	log.Printf("Using directory: %v\n ", directory)
 	jsonFilepaths := getJsonFilePaths(directory)
 	var failure int
+	var validFiles int
+	var invalidFiles int
 
 	for _, f := range jsonFilepaths {
 		func() {
@@ -39,16 +41,21 @@ func main() {
 			err = json.Unmarshal(js, &data)
 			if err != nil {
 				log.Printf("Json format error: for file %v, failed to unmarshal data: %v\n", f, err)
+				invalidFiles = invalidFiles + 1
 				failure = 1
+			} else {
+				validFiles = validFiles + 1
 			}
 		}()
 	}
 
 	if failure != 0 {
-		log.Printf("Check valid json format: There were json files with invalid format, please correct files above before merging PR")
+		log.Printf("Check valid json format: There were json files with invalid format, please correct files before merging PR")
+		log.Printf("Invalid json files: %v, valid json files: %v", invalidFiles, validFiles)
 		os.Exit(failure)
 	} else {
 		log.Printf("Check valid json format: All json files have valid format")
+		log.Printf("Invalid json files: %v, valid json files: %v", invalidFiles, validFiles)
 	}
 }
 
