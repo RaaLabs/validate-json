@@ -1,0 +1,17 @@
+name: Build Docker Image
+
+on:
+  push:
+    branches:
+      - '**'
+  pull_request:
+    types: [ closed ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Setting up Python ${{ matrix.python-version }}
+      shell: bash
+      run: |
+        docker build -f Dockerfile -t testbuild .
