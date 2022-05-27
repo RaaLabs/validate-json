@@ -10,7 +10,8 @@ import (
 )
 
 func main() {
-	directory := os.Getenv("INPUT_DIRECTORY")
+	directory := getEnv("INPUT_DIRECTORY", ".")
+	log.Printf("Using directory: %v\n ", directory)
 	jsonFilepaths := getJsonFilePaths(directory)
 	var failure int
 
@@ -71,4 +72,12 @@ func getJsonFilePaths(directory string) []string {
 	}
 
 	return files
+}
+
+func getEnv(key, defaultValue string) string {
+	value := os.Getenv(key)
+	if len(value) == 0 {
+		return defaultValue
+	}
+	return value
 }
