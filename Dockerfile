@@ -1,7 +1,17 @@
-FROM alpine:3.10
+FROM golang:1.18 as builder
 
-COPY LICENSE README.md /
+WORKDIR /app
+COPY . /app
 
-COPY entrypoint.sh /entrypoint.sh
+RUN go get -d -v
 
-ENTRYPOINT ["/entrypoint.sh"]
+# Statically compile our app for use in a distroless container
+RUN CGO_ENABLED=0 go build -ldflags="-w -s" -v -o app .
+
+# A distroless container image with some basics like SSL certificates
+# https://github.com/GoogleContainerTools/distroless
+FROM gcr.io/distroless/static
+
+COPY --from=builder /app/app /app
+
+ENTRYPOINT ["/app"]
