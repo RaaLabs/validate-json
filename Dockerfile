@@ -1,17 +1,16 @@
 FROM golang:1.18 as builder
 
-WORKDIR /app
-COPY . /app
+WORKDIR /go/src/app
+COPY main.go .
 
-RUN go get -d -v
+RUN go mod init
+RUN go get -d -v ./...
+RUN go vet -v
+RUN go test -v
 
-# Statically compile our app for use in a distroless container
-RUN CGO_ENABLED=0 go build -ldflags="-w -s" -v -o app .
+RUN CGO_ENABLED=0 go build -o /go/bin/app
 
-# A distroless container image with some basics like SSL certificates
-# https://github.com/GoogleContainerTools/distroless
 FROM gcr.io/distroless/static
 
-COPY --from=builder /app/app /app
-
-ENTRYPOINT ["/app"]
+COPY --from=builder /go/bin/app /
+CMD ["/app"]
