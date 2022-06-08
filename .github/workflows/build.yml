@@ -1,0 +1,42 @@
+name: Build Docker Image
+
+env:
+  PRERELEASE_BRANCHES: experimental,alpha,beta,rc # Comma separated list of prerelease branch names. 'alpha,rc, ...'
+
+on:
+  push:
+    branches:
+      - '**'
+  pull_request:
+    types: [ closed ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      should-publish: ${{ steps.context.outputs.should-publish }}
+      current-version: ${{ steps.context.outputs.current-version }}
+      release-type: ${{ steps.context.outputs.release-type }}
+      cascading-release: ${{ steps.context.outputs.cascading-release }}
+
+    steps:
+    - name: Establish context
+      id: context
+      uses: dolittle/establish-context-action@v2
+      with:
+        prerelease-branches: ${{ env.PRERELEASE_BRANCHES }}
+
+    - uses: actions/checkout@v3
+
+    - name: Build Docker Image
+      shell: bash
+      run: |
+        docker build -f Dockerfile -t testbuild .
+
+    - name: Create GitHub Release
+      uses: dolittle/github-release-action@v1
+      if: ${{ steps.context.outputs.should-publish == 'true' }}
+      with:
+        cascading-release: ${{ steps.context.outputs.cascading-release }}
+        version: ${{ steps.increment-version.outputs.next-version }}
+        body: ${{ steps.context.outputs.pr-body }}

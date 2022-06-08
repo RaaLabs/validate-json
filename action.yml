@@ -1,6 +1,11 @@
 name: 'Validate json files'
 description: 'Check the validity of json files'
 author: 'Raa Labs AS'
+inputs:
+  directory:
+    description: "A directory of files to include in the json validation, defaults to root directory"
+    default: "." # 
+    required: false
 runs:
   using: 'docker'
   image: 'Dockerfile'
