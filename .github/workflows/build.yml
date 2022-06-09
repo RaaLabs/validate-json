@@ -33,6 +33,14 @@ jobs:
       run: |
         docker build -f Dockerfile -t testbuild .
 
+    - name: Increment version
+      id: increment-version
+      if: ${{ steps.context.outputs.should-publish == 'true' }}
+      uses: dolittle/increment-version-action@v2
+      with:
+        version: ${{ steps.context.outputs.current-version }}
+        release-type: ${{ steps.context.outputs.release-type }}
+
     - name: Create GitHub Release
       uses: dolittle/github-release-action@v1
       if: ${{ steps.context.outputs.should-publish == 'true' }}
