@@ -32,19 +32,30 @@ func main() {
 				os.Exit(1)
 			}
 
-			var data map[string]any
-
 			if len(js) < 1 {
 				return
 			}
 
-			err = json.Unmarshal(js, &data)
-			if err != nil {
-				log.Printf("Json format error: for file %v, failed to unmarshal data: %v\n", f, err)
-				invalidFiles = invalidFiles + 1
-				failure = 1
+			if strings.HasPrefix(string(js), "[") {
+				data := []map[string]any{}
+				err = json.Unmarshal(js, &data)
+				if err != nil {
+					log.Printf("Json format error: for file %v, failed to unmarshal data: %v\n", f, err)
+					invalidFiles = invalidFiles + 1
+					failure = 1
+				} else {
+					validFiles = validFiles + 1
+				}
 			} else {
-				validFiles = validFiles + 1
+				data := make(map[string]any)
+				err = json.Unmarshal(js, &data)
+				if err != nil {
+					log.Printf("Json format error: for file %v, failed to unmarshal data: %v\n", f, err)
+					invalidFiles = invalidFiles + 1
+					failure = 1
+				} else {
+					validFiles = validFiles + 1
+				}
 			}
 		}()
 	}
