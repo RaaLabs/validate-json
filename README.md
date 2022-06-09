@@ -6,11 +6,26 @@ This action checks the validity of json files. The action is run using a Docker 
 ## Usage
 See [action.yml](action.yml)
 
-Sample workflow:
+Complete sample workflow:
 ```yaml
-steps:
-  - name: Validate json files
-    uses: RaaLabs/validate-json@0.0.4
-    with:
-      directory: "."
+name: Validate json files
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate-json:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 2
+
+    - name: Validate json files
+      uses: RaaLabs/validate-json@0.0.6
+      with:
+        directory: "."
+
 ```
