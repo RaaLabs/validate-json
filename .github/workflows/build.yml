@@ -34,6 +34,12 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+    - name: Docker Build
+      if: ${{ steps.context.outputs.should-publish == 'false' }}
+      shell: bash
+      run: |
+          docker build -f Dockerfile -t testbuild .
+
     - name: Increment version
       id: increment-version
       if: ${{ steps.context.outputs.should-publish == 'true' }}
@@ -43,6 +49,7 @@ jobs:
         release-type: ${{ steps.context.outputs.release-type }}
 
     - name: Build & push Docker Images
+      if: ${{ steps.context.outputs.should-publish == 'true' }}
       shell: bash
       run: |
         docker build -f Dockerfile -t raalabs/validate-json:${{ steps.increment-version.outputs.next-version }} -t raalabs/validate-json:latest .
