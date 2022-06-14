@@ -8,4 +8,4 @@ inputs:
     required: false
 runs:
   using: 'docker'
-  image: 'docker://raalabs/validate-json:v0.0.7'
+  image: 'docker://raalabs/validate-json:0.0.7'
