@@ -28,7 +28,7 @@ jobs:
         fetch-depth: 2
 
     - name: Validate json files
-      uses: RaaLabs/validate-json@0.0.6
+      uses: RaaLabs/validate-json@v0.0.7
       with:
         directory: "."
 
