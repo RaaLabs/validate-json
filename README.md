@@ -5,6 +5,10 @@ This action validates json files. The action scans the repository for files with
 
 The action is run using a Docker container and is written in Go.
 
+> **Warning**
+> We are switching from Docker Hub to GitHub container registry to store the images for this action (Docker sunsets free plans for teams). Use version 1.0.0 going forward as the previous versions will stop working once Docker removes the images from Docker hub (pull rate limits apply from 14.April 2023, removal on 14.May 2023)
+
+
 ## Inputs
 - `directory`: (string, optional) The path on which to scan .json files, defaults to `.`, in which case it scans the whole repository.
 
@@ -23,12 +27,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         fetch-depth: 2
 
     - name: Validate json files
-      uses: RaaLabs/validate-json@v0.0.7
+      uses: RaaLabs/validate-json@v1.0.0
       with:
         directory: "."
 
