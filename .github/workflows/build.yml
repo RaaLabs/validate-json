@@ -54,7 +54,7 @@ jobs:
       if: ${{ steps.context.outputs.should-publish == 'true' }}
       shell: bash
       run: |
-        docker build -f Dockerfile -t ghcr.io/raalabs/validate-json:${{ steps.increment-version.outputs.next-version }} -t raalabs/validate-json:latest .
+        docker build -f Dockerfile -t ghcr.io/raalabs/validate-json:${{ steps.increment-version.outputs.next-version }} -t ghcr.io/raalabs/validate-json:latest .
         docker push ghcr.io/raalabs/validate-json:${{ steps.increment-version.outputs.next-version }}
         docker push ghcr.io/raalabs/validate-json:latest
         
