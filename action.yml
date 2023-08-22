@@ -8,4 +8,4 @@ inputs:
     required: false
 runs:
   using: 'docker'
-  image: 'docker://ghcr.io/raalabs/validate-json:1.0.0'
+  image: 'docker://ghcr.io/raalabs/validate-json:1.0.1'
