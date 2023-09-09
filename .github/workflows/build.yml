@@ -26,7 +26,7 @@ jobs:
       with:
         prerelease-branches: ${{ env.PRERELEASE_BRANCHES }}
 
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Login to GitHub Container Registry
       if: ${{ steps.context.outputs.should-publish == 'true' }}
